@@ -1,7 +1,7 @@
 from fastapi import Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta, timezone
-from typing import Set, Optional
+from typing import Set, Optional, List
 from .database import get_db
 from .models import User, TierFeature
 from .cache import CacheService
@@ -86,7 +86,7 @@ class FeatureGate:
             return {"message": "Access granted"}
     """
     
-    def __init__(self, required_features: list[str]):
+    def __init__(self, required_features: List[str]):
         self.required_features = required_features
     
     async def __call__(
