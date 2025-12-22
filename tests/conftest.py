@@ -1,7 +1,7 @@
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from app.models import Base, User, Tier, Feature, TierFeature
 from app.database import get_db
 from app.main import app
@@ -76,10 +76,10 @@ def setup_demo_data(db_session: Session):
     
     # Create test users
     user_free = User(id=1, email="free@example.com", tier_id=1, subscription_expires_at=None)
-    user_teams = User(id=2, email="teams@example.com", tier_id=2, subscription_expires_at=datetime.utcnow() + timedelta(days=30))
-    user_pro = User(id=3, email="pro@example.com", tier_id=3, subscription_expires_at=datetime.utcnow() + timedelta(days=30))
-    user_expired = User(id=4, email="expired@example.com", tier_id=3, subscription_expires_at=datetime.utcnow() - timedelta(days=10), grace_period_days=7)
-    user_grace = User(id=5, email="grace@example.com", tier_id=3, subscription_expires_at=datetime.utcnow() - timedelta(days=3), grace_period_days=7)
+    user_teams = User(id=2, email="teams@example.com", tier_id=2, subscription_expires_at=datetime.now(timezone.utc) + timedelta(days=30))
+    user_pro = User(id=3, email="pro@example.com", tier_id=3, subscription_expires_at=datetime.now(timezone.utc) + timedelta(days=30))
+    user_expired = User(id=4, email="expired@example.com", tier_id=3, subscription_expires_at=datetime.now(timezone.utc) - timedelta(days=10), grace_period_days=7)
+    user_grace = User(id=5, email="grace@example.com", tier_id=3, subscription_expires_at=datetime.now(timezone.utc) - timedelta(days=3), grace_period_days=7)
     
     db_session.add_all([user_free, user_teams, user_pro, user_expired, user_grace])
     db_session.commit()

@@ -1,6 +1,6 @@
 from fastapi import Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Set, Optional
 from .database import get_db
 from .models import User, TierFeature
@@ -56,9 +56,15 @@ class FeatureEntitlementService:
             # No expiration date means permanent subscription
             return True
         
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         grace_period = timedelta(days=user.grace_period_days)
-        expiration_with_grace = user.subscription_expires_at + grace_period
+        
+        # Make expiration datetime timezone-aware if it's naive
+        expiration = user.subscription_expires_at
+        if expiration.tzinfo is None:
+            expiration = expiration.replace(tzinfo=timezone.utc)
+        
+        expiration_with_grace = expiration + grace_period
         
         return now <= expiration_with_grace
     
