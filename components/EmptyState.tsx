@@ -19,7 +19,7 @@ export default function EmptyState() {
           Coming Soon
         </h3>
         <p className="mt-2 text-gray-600 max-w-md mx-auto">
-          We're preparing something delicious for you! Our chocolate varieties will be available soon.
+          We&apos;re preparing something delicious for you! Our chocolate varieties will be available soon.
         </p>
         <div className="mt-6">
           <button className="px-6 py-3 bg-amber-600 text-white rounded-md hover:bg-amber-700 transition-colors duration-200 font-medium">
