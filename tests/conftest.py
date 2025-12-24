@@ -1,8 +1,11 @@
 import pytest
 import pytest_asyncio
+import uuid
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.pool import NullPool
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 from app.main import app
 from app.db.database import Base, get_db
@@ -36,6 +39,17 @@ async def db_session():
     
     async with test_engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
+
+
+@pytest_asyncio.fixture(scope="function", autouse=True)
+async def reset_rate_limiter():
+    """Reset rate limiter before each test with unique storage"""
+    # Use unique storage ID per test to avoid shared state
+    unique_storage = f"memory://test-{uuid.uuid4()}"
+    limiter = Limiter(key_func=get_remote_address, storage_uri=unique_storage)
+    app.state.limiter = limiter
+    yield
+    # No cleanup needed as each test gets a fresh limiter
 
 
 @pytest_asyncio.fixture(scope="function")
