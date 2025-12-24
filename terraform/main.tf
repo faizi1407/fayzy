@@ -28,15 +28,17 @@ resource "google_service_account" "backend" {
   description  = "Service account for backend Cloud Run service with least-privilege permissions"
 }
 
-# IAM binding for backend to access Secret Manager
+# IAM binding for backend to access Secret Manager (only if secrets are used)
 resource "google_project_iam_member" "backend_secret_accessor" {
+  count   = length(var.backend_secret_env_vars) > 0 ? 1 : 0
   project = var.project_id
   role    = "roles/secretmanager.secretAccessor"
   member  = "serviceAccount:${google_service_account.backend.email}"
 }
 
-# IAM binding for frontend to access Secret Manager
+# IAM binding for frontend to access Secret Manager (only if secrets are used)
 resource "google_project_iam_member" "frontend_secret_accessor" {
+  count   = length(var.frontend_secret_env_vars) > 0 ? 1 : 0
   project = var.project_id
   role    = "roles/secretmanager.secretAccessor"
   member  = "serviceAccount:${google_service_account.frontend.email}"
@@ -125,10 +127,6 @@ resource "google_cloud_run_v2_service" "frontend" {
     type    = "TRAFFIC_TARGET_ALLOCATION_TYPE_LATEST"
     percent = 100
   }
-
-  depends_on = [
-    google_project_iam_member.frontend_secret_accessor
-  ]
 }
 
 # Backend Cloud Run Service
@@ -214,10 +212,6 @@ resource "google_cloud_run_v2_service" "backend" {
     type    = "TRAFFIC_TARGET_ALLOCATION_TYPE_LATEST"
     percent = 100
   }
-
-  depends_on = [
-    google_project_iam_member.backend_secret_accessor
-  ]
 }
 
 # IAM policy to allow public access to frontend
