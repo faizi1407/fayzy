@@ -1,0 +1,52 @@
+# Example terraform.tfvars file
+# Copy this to terraform.tfvars and fill in your values
+
+project_id = "your-gcp-project-id"
+region     = "us-central1"
+
+# Frontend Configuration
+frontend_service_name = "frontend"
+frontend_image        = "gcr.io/your-project-id/frontend:latest"
+frontend_port         = 8080
+frontend_cpu          = "1000m"
+frontend_memory       = "512Mi"
+frontend_max_instances = 10
+
+# Backend Configuration
+backend_service_name = "backend"
+backend_image        = "gcr.io/your-project-id/backend:latest"
+backend_port         = 8080
+backend_cpu          = "1000m"
+backend_memory       = "512Mi"
+backend_max_instances = 10
+
+# Environment Variables
+frontend_env_vars = {
+  "ENVIRONMENT" = "production"
+  "API_URL"     = "https://backend-xxxxx.run.app"
+}
+
+backend_env_vars = {
+  "ENVIRONMENT" = "production"
+  "PORT"        = "8080"
+}
+
+# Secret Manager Integration Example
+# Uncomment and configure if you have secrets in Secret Manager
+# frontend_secret_env_vars = {
+#   "API_KEY" = {
+#     secret  = "frontend-api-key"
+#     version = "latest"
+#   }
+# }
+
+# backend_secret_env_vars = {
+#   "DATABASE_PASSWORD" = {
+#     secret  = "database-password"
+#     version = "latest"
+#   }
+#   "JWT_SECRET" = {
+#     secret  = "jwt-secret"
+#     version = "latest"
+#   }
+# }
