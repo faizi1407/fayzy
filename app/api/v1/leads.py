@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy import select
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 import time
+import logging
 
 from app.schemas.lead import LeadCreate, LeadResponse
 from app.models.lead import Lead
@@ -12,6 +12,7 @@ from app.db.database import get_db
 
 router = APIRouter()
 limiter = Limiter(key_func=get_remote_address)
+logger = logging.getLogger(__name__)
 
 
 @router.post("/leads", response_model=LeadResponse, status_code=status.HTTP_201_CREATED)
@@ -45,7 +46,7 @@ async def create_lead(
         # Check performance requirement
         elapsed_time = (time.time() - start_time) * 1000  # Convert to ms
         if elapsed_time >= 50:
-            print(f"Warning: Database insert took {elapsed_time:.2f}ms (>50ms threshold)")
+            logger.warning(f"Database insert took {elapsed_time:.2f}ms (>50ms threshold)")
         
         return db_lead
     except IntegrityError:
