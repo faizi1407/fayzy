@@ -69,14 +69,14 @@ export default function Hero() {
             transition={{ duration: 0.6, ease: 'easeOut' }}
             className="relative order-1 lg:order-2"
           >
-            {/* Fixed aspect ratio container to prevent CLS - 16:9 ratio */}
+            {/* Fixed aspect ratio container to prevent CLS - 4:3 ratio on mobile, square on desktop */}
             <div className="relative w-full aspect-[4/3] lg:aspect-square max-w-2xl mx-auto">
               <div className="absolute inset-0 bg-gradient-to-br from-amber-200/20 to-orange-300/20 rounded-2xl transform rotate-3" />
               <div className="absolute inset-0 bg-gradient-to-tl from-amber-300/10 to-orange-200/10 rounded-2xl transform -rotate-3" />
               
               <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl">
                 <Image
-                  src="/chocolate-hero.jpg"
+                  src="/chocolate-hero.svg"
                   alt="Premium artisan chocolate bars with rich cocoa"
                   fill
                   priority
