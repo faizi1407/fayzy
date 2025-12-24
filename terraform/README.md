@@ -85,7 +85,7 @@ Services are configured to scale to zero when idle:
 - `min_instance_count = 0` - Scales down to 0 instances
 - `max_instance_count` - Configurable per service (default: 10)
 
-Cloud Run automatically scales down instances after approximately 5 minutes of no traffic.
+Cloud Run automatically scales down instances to zero when there is no traffic. The scale-down typically occurs after approximately 15 minutes of inactivity, though this may vary. Setting `min_instance_count = 0` enables this cost-saving behavior.
 
 ### Secret Manager Integration
 

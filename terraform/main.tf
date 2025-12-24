@@ -118,6 +118,7 @@ resource "google_cloud_run_v2_service" "frontend" {
       }
     }
 
+    # Maximum time a request is allowed to run (not related to scale-to-zero timing)
     timeout = "300s"
 
     max_instance_request_concurrency = var.frontend_max_concurrency
@@ -203,6 +204,7 @@ resource "google_cloud_run_v2_service" "backend" {
       }
     }
 
+    # Maximum time a request is allowed to run (not related to scale-to-zero timing)
     timeout = "300s"
 
     max_instance_request_concurrency = var.backend_max_concurrency
