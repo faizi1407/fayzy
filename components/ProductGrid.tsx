@@ -6,6 +6,7 @@ import ProductCard from './ProductCard';
 import ProductCardSkeleton from './ProductCardSkeleton';
 import ProductModal from './ProductModal';
 import EmptyState from './EmptyState';
+import { capitalize } from '@/lib/utils/string';
 
 interface ProductGridProps {
   products: Product[];
@@ -64,7 +65,7 @@ export default function ProductGrid({ products, isLoading = false }: ProductGrid
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
-              {category.charAt(0).toUpperCase() + category.slice(1)}
+              {capitalize(category)}
             </button>
           ))}
         </div>

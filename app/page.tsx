@@ -4,9 +4,6 @@ import ProductGrid from '@/components/ProductGrid';
 import ProductCardSkeleton from '@/components/ProductCardSkeleton';
 
 export default async function Home() {
-  // Simulate network delay to show loading state
-  await new Promise(resolve => setTimeout(resolve, 100));
-  
   const products = await getMockProducts();
 
   return (
